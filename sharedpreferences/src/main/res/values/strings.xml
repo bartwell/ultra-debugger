@@ -1,0 +1,4 @@
+<resources>
+    <string name="sharedpreferences_name">Shared Preferences</string>
+    <string name="sharedpreferences_description">Manage shared preferences content</string>
+</resources>

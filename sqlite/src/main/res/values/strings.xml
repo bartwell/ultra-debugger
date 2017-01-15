@@ -1,0 +1,4 @@
+<resources>
+    <string name="sqlite_name">SQLite</string>
+    <string name="sqlite_description">Show, edit and remove data from SQLite</string>
+</resources>
