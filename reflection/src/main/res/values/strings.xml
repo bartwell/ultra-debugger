@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Reflection</string>
+    <string name="reflection_name">Reflection</string>
+    <string name="reflection_description">Manage fields and methods in current Activity</string>
+</resources>

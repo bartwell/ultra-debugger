@@ -17,6 +17,7 @@ _You can use `compile` instead of `debugCompile` if you need._
 
 __2.__ Add libraries of modules that you need:
 ```groovy
+debugCompile 'ru.bartwell:ultradebugger.module.reflection:1.0'
 debugCompile 'ru.bartwell:ultradebugger.module.sqlite:1.0'
 debugCompile 'ru.bartwell:ultradebugger.module.sharedpreferences:1.0'
 ```
@@ -41,6 +42,7 @@ Ultra Debugger is module-based tools for easy Android applications debugging. It
 
 Currently available modules:
 
+* Reflection - allow call methods from current activity, see list of fields and methods in this activity
 * SQLite - allow see, add, edit and delete items from databases
 * Shared Preferences - allow see, add, edit and delete items from shared preferences
 
@@ -58,13 +60,16 @@ Your help is really appreciated.
 
 ## Modules creation
 
-1. Create Android library project.
-2. Add base library as dependency:
+__1.__ Create Android library project.
+
+__2.__ Add base library as dependency:
 ```groovy
 compile 'ru.bartwell:ultradebugger.base:1.0'
 ```
-3. Create class `Module extends BaseModule` in package `ru.bartwell.ultradebugger.module.xxx`, where `xxx` - your module name.
-4. Implement methods in your class:
+
+__3.__ Create class `Module extends BaseModule` in package `ru.bartwell.ultradebugger.module.xxx`, where `xxx` - your module name.
+
+__4.__ Implement methods in your class:
  * `String getName()` - return human readable your module name from this method
  * `String getDescription()` - return description of your module
  * `HttpResponse handle(HttpRequest)` - handle HTTP requests in this method and return result which will sent into browser.

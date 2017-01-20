@@ -5,6 +5,11 @@ package ru.bartwell.ultradebugger.base.html;
  */
 
 public class ErrorPage extends Page {
+
+    public ErrorPage(String errorText) {
+        this(errorText, true);
+    }
+
     public ErrorPage(String errorText, boolean showHomeButton) {
         Content content = new Content();
         content.add(new RawContentPart("<p align=\"center\">" + errorText + "</p>"));

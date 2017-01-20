@@ -65,7 +65,7 @@ public class Module extends BaseModule {
     }
 
     @Override
-    public HttpResponse handle(HttpRequest request) {
+    public HttpResponse handle(@NonNull HttpRequest request) {
         Page page;
         String file = getParameterValue(request.getParameters(), PARAMETER_FILE);
         if (file == null) {

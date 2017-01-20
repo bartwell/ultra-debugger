@@ -12,11 +12,6 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        buildConfigField "String[]", "KNOWN_MODULES", "{" +
-                "\"sqlite\"," +
-                "\"sharedpreferences\"," +
-                "\"reflection\"" +
-                "}"
     }
     buildTypes {
         release {
@@ -28,15 +23,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'org.nanohttpd:nanohttpd:2.3.1'
-    compile project(':base')
-    compile project(':sqlite')
-    compile project(':sharedpreferences')
-    compile project(':reflection')
-    testCompile 'junit:junit:4.12'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    testCompile 'junit:junit:4.12'
+    compile project(':base')
+    compile 'com.google.code.gson:gson:2.8.0'
 }
 
 apply from: '../maven_push.gradle'

@@ -2,9 +2,9 @@ package ru.bartwell.ultradebugger.base.html;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +15,7 @@ public class Form extends ContentPart {
 
     private final Table mTable;
     private int mRow;
-    private Map<String, String> mHiddens = new HashMap<>();
+    private StringBuilder mHiddens = new StringBuilder();
 
     public void setPostMethod(boolean isPostMethod) {
         mIsPostMethod = isPostMethod;
@@ -37,19 +37,23 @@ public class Form extends ContentPart {
             value = "";
         }
         mTable.add(0, mRow, new RawContentPart(label));
-        mTable.add(1, mRow, new RawContentPart("<input type=\"text\" name=\"" + name + "\" value=\"" + value + "\">"));
+        mTable.add(1, mRow, new RawContentPart("<input type=\"text\" name=\"" + TextUtils.htmlEncode(name) + "\" value=\"" + TextUtils.htmlEncode(value) + "\">"));
         mRow++;
     }
 
     public void addHidden(String name, String value) {
-        mHiddens.put(name, value);
+        mHiddens.append("<input type=\"hidden\" name=\"")
+                .append(TextUtils.htmlEncode(name))
+                .append("\" value=\"")
+                .append(TextUtils.htmlEncode(value))
+                .append("\">");
     }
 
     public void addSelect(String label, String name, ArrayList<String> values) {
         mTable.add(0, mRow, new RawContentPart(label));
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<select name=\"")
-                .append(name)
+                .append(TextUtils.htmlEncode(name))
                 .append("\">");
         for (String value : values) {
             stringBuilder.append("<option>")
@@ -62,7 +66,7 @@ public class Form extends ContentPart {
     }
 
     public void addSubmit(String label) {
-        mTable.add(1, mRow, new RawContentPart("<input type=\"submit\" value=\"" + label + "\">"));
+        mTable.add(1, mRow, new RawContentPart("<input type=\"submit\" value=\"" + TextUtils.htmlEncode(label) + "\">"));
         mRow++;
     }
 
@@ -74,13 +78,7 @@ public class Form extends ContentPart {
                 .append("\" method=\"")
                 .append(mIsPostMethod ? "post" : "get")
                 .append("\">");
-        for (Map.Entry<String, String> entry : mHiddens.entrySet()) {
-            stringBuilder.append("<input type=\"hidden\" name=\"")
-                    .append(entry.getKey())
-                    .append("\" value=\"")
-                    .append(entry.getValue())
-                    .append("\">");
-        }
+        stringBuilder.append(mHiddens.toString());
         stringBuilder.append(mTable.toHtml())
                 .append("</form>");
         return stringBuilder.toString();

@@ -1,9 +1,12 @@
 package ru.bartwell.ultradebugger.base;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +19,14 @@ import ru.bartwell.ultradebugger.base.model.HttpResponse;
  */
 
 public abstract class BaseModule {
+    @NonNull
     private Context mContext;
 
-    public BaseModule(Context context) {
+    public BaseModule(@NonNull Context context) {
         mContext = context;
     }
 
+    @NonNull
     public Context getContext() {
         return mContext;
     }
@@ -31,22 +36,46 @@ public abstract class BaseModule {
         return mContext.getString(stringResId);
     }
 
-    public Map<String, String> getMapFromParameters(Map<String, List<String>> parameters, String name) {
+    @NonNull
+    protected Map<String, String> getMapFromParameters(@Nullable Map<String, List<String>> parameters, @Nullable String name) {
         Map<String, String> result = new HashMap<>();
-        for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
-            if (entry.getKey().startsWith(name + "[")) {
-                result.put(entry.getKey().substring(name.length() + 1, entry.getKey().length() - 1), entry.getValue().get(0));
+        if (parameters != null && name != null) {
+            for (Map.Entry<String, List<String>> entry : parameters.entrySet()) {
+                if (entry.getKey().startsWith(name + "[")) {
+                    result.put(entry.getKey().substring(name.length() + 1, entry.getKey().length() - 1), entry.getValue().get(0));
+                }
             }
         }
         return result;
     }
 
+    @NonNull
+    protected List<String> getListFromParameters(@Nullable Map<String, List<String>> parameters, @Nullable String name) {
+        if (parameters != null && name != null) {
+            List<String> values = parameters.get(name + "[]");
+            if (values != null) {
+                return values;
+            }
+        }
+        return new ArrayList<>();
+    }
+
     @Nullable
-    public String getParameterValue(@Nullable Map<String, List<String>> parameters, @Nullable String key) {
+    protected String getParameterValue(@Nullable Map<String, List<String>> parameters, @Nullable String key) {
         if (parameters != null && key != null && parameters.get(key) != null) {
             return parameters.get(key).get(0);
         }
         return null;
+    }
+
+    @NonNull
+    protected String getQueryStringFromArray(@NonNull String paramName, @Nullable String[] array, boolean startWithAmp) {
+        if (array != null && array.length > 0) {
+            return (startWithAmp ? "&" : "?") +
+                    paramName + "[]=" +
+                    TextUtils.join("&" + paramName + "[]=", array);
+        }
+        return "";
     }
 
     @Nullable
@@ -55,5 +84,6 @@ public abstract class BaseModule {
     @Nullable
     public abstract String getDescription();
 
-    public abstract HttpResponse handle(HttpRequest request);
+    @NonNull
+    public abstract HttpResponse handle(@NonNull HttpRequest request);
 }

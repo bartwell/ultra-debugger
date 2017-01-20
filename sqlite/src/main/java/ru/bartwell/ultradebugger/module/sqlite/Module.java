@@ -51,8 +51,9 @@ public class Module extends BaseModule {
         return getString(R.string.sqlite_description);
     }
 
+    @NonNull
     @Override
-    public HttpResponse handle(HttpRequest request) {
+    public HttpResponse handle(@NonNull HttpRequest request) {
         Page page;
         String database = getParameterValue(request.getParameters(), PARAMETER_DATABASE);
         String table = getParameterValue(request.getParameters(), PARAMETER_TABLE);
