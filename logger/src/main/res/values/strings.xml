@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Logger</string>
+    <string name="logger_name">Logger</string>
+    <string name="logger_description">Module for logging and data tracking</string>
+</resources>

@@ -13,7 +13,8 @@ Currently available modules:
 * SQLite - allow see, add, edit and delete items from databases
 * Shared Preferences - allow see, add, edit and delete items from shared preferences
 * Info - shows information about device
-* Files - allow see directories and download/remove files from device (including application directory )
+* Logger - Module for logging and variables tracking (use methods `Logger.addLog()` and `Logger.saveValue()`)
+* Files - allow see directories and download/remove files from device (including application directory)
 
 _New modules will added..._
 
@@ -36,6 +37,7 @@ debugCompile 'ru.bartwell:ultradebugger.module.sqlite:1.1'
 debugCompile 'ru.bartwell:ultradebugger.module.sharedpreferences:1.1'
 debugCompile 'ru.bartwell:ultradebugger.module.info:1.1'
 debugCompile 'ru.bartwell:ultradebugger.module.files:1.1'
+debugCompile 'ru.bartwell:ultradebugger.module.logger:1.1'
 ```
 
 __3.__ Initialize library. Add code below in your Application class:
@@ -84,7 +86,7 @@ _Please feel free to see source code of another modules as example._
 
 ## TODO
 
-* More modules: files, Realm, something else
+* More modules: Realm, something else
 * Pagination
 * Design improvement for HTML pages
 * Code quality improvements
