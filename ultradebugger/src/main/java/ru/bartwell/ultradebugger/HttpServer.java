@@ -65,10 +65,18 @@ class HttpServer extends NanoHTTPD {
         } else {
             BaseModule instance = ModulesManager.getInstance().get(module);
             if (instance == null) {
-                return newFixedLengthResponse(new ErrorPage("Module " + module + " unavailable", false).toHtml());
+                return newFixedLengthResponse(new ErrorPage("Module '" + module + "' unavailable", false).toHtml());
             } else {
                 HttpResponse response = instance.handle(request);
-                return newFixedLengthResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getContent());
+                if (response.getStream() == null) {
+                    return newFixedLengthResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getContent());
+                } else {
+                    if (response.getContentLength() >= 0) {
+                        return newFixedLengthResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getStream(), response.getContentLength());
+                    } else {
+                        return newChunkedResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getStream());
+                    }
+                }
             }
         }
     }

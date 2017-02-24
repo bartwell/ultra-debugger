@@ -7,7 +7,6 @@ import android.os.IBinder;
 
 public class ServerService extends Service {
     private static final String EXTRA_PORT = "port";
-    private static int sPort = HttpServer.DEFAULT_PORT;
     private HttpServer mHttpServer;
 
     @Override
@@ -17,8 +16,8 @@ public class ServerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        sPort = intent == null ? HttpServer.DEFAULT_PORT : intent.getIntExtra(EXTRA_PORT, HttpServer.DEFAULT_PORT);
-        mHttpServer = new HttpServer(sPort);
+        int port = intent == null ? HttpServer.DEFAULT_PORT : intent.getIntExtra(EXTRA_PORT, HttpServer.DEFAULT_PORT);
+        mHttpServer = new HttpServer(port);
         return START_STICKY;
     }
 
@@ -36,9 +35,5 @@ public class ServerService extends Service {
 
     public static void stop(Context context) {
         context.stopService(new Intent(context, ServerService.class));
-    }
-
-    public static int getPort() {
-        return sPort;
     }
 }

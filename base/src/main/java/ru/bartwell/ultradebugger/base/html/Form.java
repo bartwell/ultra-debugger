@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
  * Created by BArtWell on 07.01.2017.
@@ -72,15 +71,13 @@ public class Form extends ContentPart {
 
     @Override
     public String toHtml() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<form action=\"")
-                .append(mAction)
-                .append("\" method=\"")
-                .append(mIsPostMethod ? "post" : "get")
-                .append("\">");
-        stringBuilder.append(mHiddens.toString());
-        stringBuilder.append(mTable.toHtml())
-                .append("</form>");
-        return stringBuilder.toString();
+        return "<form action=\"" +
+                mAction +
+                "\" method=\"" +
+                (mIsPostMethod ? "post" : "get") +
+                "\">" +
+                mHiddens.toString() +
+                mTable.toHtml() +
+                "</form>";
     }
 }

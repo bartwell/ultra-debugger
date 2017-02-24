@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply from: "../shared.gradle"
 
 android {
     compileSdkVersion 24
@@ -7,8 +8,6 @@ android {
         applicationId "ru.bartwell.ultradebugger.sampleapp"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -27,6 +26,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     testCompile 'junit:junit:4.12'
     compile project(':ultradebugger')
-    compile project(':sharedpreferences')
-    compile project(':sqlite')
 }

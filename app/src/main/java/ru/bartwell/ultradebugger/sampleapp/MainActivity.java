@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,7 +19,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ((TextView) findViewById(R.id.url)).setText(getString(R.string.ip_format, UltraDebugger.getPort()));
+        String ip = UltraDebugger.getIp();
+        String address;
+        if (TextUtils.isEmpty(ip)) {
+            address = getString(R.string.unknown_ip_format, UltraDebugger.getPort());
+        } else {
+            address = getString(R.string.ip_format, ip, UltraDebugger.getPort());
+        }
+        ((TextView) findViewById(R.id.url)).setText(address);
         new DbHelper(this).getReadableDatabase();
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(this).edit();
         editor.putString("string_value", "String value");

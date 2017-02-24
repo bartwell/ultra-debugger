@@ -13,11 +13,12 @@ import com.google.gson.Gson;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import ru.bartwell.ultradebugger.base.BaseModule;
+import ru.bartwell.ultradebugger.base.utils.HttpUtils;
+import ru.bartwell.ultradebugger.base.utils.CommonUtils;
 import ru.bartwell.ultradebugger.base.html.Content;
 import ru.bartwell.ultradebugger.base.html.ContentPart;
 import ru.bartwell.ultradebugger.base.html.ErrorPage;
@@ -44,17 +45,18 @@ public class Module extends BaseModule {
 
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
-    public Module(Context context) {
-        super(context);
+    public Module(@NonNull Context context, @NonNull String moduleId) {
+        super(context, moduleId);
     }
 
-    @Nullable
+
+    @NonNull
     @Override
     public String getName() {
         return getString(R.string.reflection_name);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getDescription() {
         return getString(R.string.reflection_description);
@@ -65,14 +67,14 @@ public class Module extends BaseModule {
     public HttpResponse handle(@NonNull HttpRequest request) {
         Page page = new Page();
         page.setTitle(getName());
-        final String prepareMethodName = getParameterValue(request.getParameters(), PARAMETER_PREPARE);
+        final String prepareMethodName = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_PREPARE);
         if (TextUtils.isEmpty(prepareMethodName)) {
             Content content = new Content();
-            final String callMethodName = getParameterValue(request.getParameters(), PARAMETER_CALL);
+            final String callMethodName = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_CALL);
             if (callMethodName != null) {
                 String callResult = callMethod(callMethodName,
-                        getListFromParameters(request.getParameters(), PARAMETER_TYPE),
-                        getListFromParameters(request.getParameters(), PARAMETER_VALUE));
+                        HttpUtils.getListFromParameters(request.getParameters(), PARAMETER_TYPE),
+                        HttpUtils.getListFromParameters(request.getParameters(), PARAMETER_VALUE));
                 Table table = new Table();
                 table.add(0, 0, new RawContentPart(callMethodName + "() result"));
                 table.add(1, 0, new RawContentPart(callResult));
@@ -84,8 +86,8 @@ public class Module extends BaseModule {
             Form form = new Form();
             form.setAction(request.getUri());
             form.addHidden(PARAMETER_CALL, prepareMethodName);
-            List<String> labels = getListFromParameters(request.getParameters(), PARAMETER_LABEL);
-            List<String> parameters = getListFromParameters(request.getParameters(), PARAMETER_TYPE);
+            List<String> labels = HttpUtils.getListFromParameters(request.getParameters(), PARAMETER_LABEL);
+            List<String> parameters = HttpUtils.getListFromParameters(request.getParameters(), PARAMETER_TYPE);
             for (int i = 0; i < parameters.size(); i++) {
                 form.addHidden(PARAMETER_TYPE + "[]", parameters.get(i));
                 String defValue = "";
@@ -113,7 +115,7 @@ public class Module extends BaseModule {
 
     private Content buildMembersList() {
         try {
-            Activity activity = getActivity();
+            Activity activity = CommonUtils.getCurrentActivity();
             if (activity == null) {
                 return new ErrorPage("Activity not available for listing").getContent();
             } else {
@@ -145,8 +147,8 @@ public class Module extends BaseModule {
             String url;
             if (parameters.length > 0) {
                 url = "?" + PARAMETER_PREPARE + "=" + method.getName()
-                        + getQueryStringFromArray(PARAMETER_TYPE, names, true)
-                        + getQueryStringFromArray(PARAMETER_LABEL, simpleNames, true);
+                        + HttpUtils.getQueryStringFromArray(PARAMETER_TYPE, names, true)
+                        + HttpUtils.getQueryStringFromArray(PARAMETER_LABEL, simpleNames, true);
             } else {
                 url = "?" + PARAMETER_CALL + "=" + method.getName();
             }
@@ -187,7 +189,7 @@ public class Module extends BaseModule {
             @Override
             public void run() {
                 try {
-                    Activity activity = getActivity();
+                    Activity activity = CommonUtils.getCurrentActivity();
                     if (activity == null) {
                         result[0] = "Error: Activity not available for call";
                     } else {
@@ -256,34 +258,5 @@ public class Module extends BaseModule {
                 return long.class;
         }
         return Class.forName(type);
-    }
-
-    @Nullable
-    private static Activity getActivity() {
-        try {
-            Class activityThreadClass = Class.forName("android.app.ActivityThread");
-            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
-            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
-            activitiesField.setAccessible(true);
-
-            Map<Object, Object> activities = (Map<Object, Object>) activitiesField.get(activityThread);
-            if (activities == null)
-                return null;
-
-            for (Object activityRecord : activities.values()) {
-                Class activityRecordClass = activityRecord.getClass();
-                Field pausedField = activityRecordClass.getDeclaredField("paused");
-                pausedField.setAccessible(true);
-                if (!pausedField.getBoolean(activityRecord)) {
-                    Field activityField = activityRecordClass.getDeclaredField("activity");
-                    activityField.setAccessible(true);
-                    Activity activity = (Activity) activityField.get(activityRecord);
-                    return activity;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }

@@ -1,5 +1,7 @@
 package ru.bartwell.ultradebugger.base.html;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,16 +11,18 @@ import java.util.Map;
 
 public class Table extends ContentPart {
 
-    Map<CellXY, ContentPart> mContent = new HashMap<>();
+    @NonNull
+    private Map<CellXY, ContentPart> mContent = new HashMap<>();
     private int mMaxX;
     private int mMaxY;
 
-    public void add(int x, int y, ContentPart part) {
+    public void add(int x, int y, @NonNull ContentPart part) {
         mMaxX = Math.max(mMaxX, x);
         mMaxY = Math.max(mMaxY, y);
         mContent.put(new CellXY(x, y), part);
     }
 
+    @NonNull
     @Override
     public String toHtml() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -49,7 +53,7 @@ public class Table extends ContentPart {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(@NonNull Object o) {
             if (this == o) return true;
             if (!(o instanceof CellXY)) return false;
             CellXY key = (CellXY) o;

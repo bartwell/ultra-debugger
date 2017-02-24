@@ -1,1 +1,1 @@
-include ':app', ':ultradebugger', ':sqlite', ':sharedpreferences', ':base', ':reflection'
+include ':app', ':ultradebugger', ':sqlite', ':sharedpreferences', ':base', ':reflection', ':info', ':files'

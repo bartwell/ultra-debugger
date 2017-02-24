@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Files</string>
+    <string name="files_name">Files</string>
+    <string name="files_description">Manage files on device</string>
+</resources>

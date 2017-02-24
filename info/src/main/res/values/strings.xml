@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Info</string>
+    <string name="info_name">Info</string>
+    <string name="info_description">Information about device</string>
+    <string name="device_language">Device language</string>
+    <string name="timezone">Timezone</string>
+    <string name="locale_country">Locale country</string>
+    <string name="date_and_time">Data and time</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="model">Model</string>
+    <string name="processors_count">Processors count</string>
+    <string name="ip_v4">IPv4</string>
+    <string name="ip_v6">IPv6</string>
+    <string name="mac">MAC</string>
+    <string name="total_memory">Total memory</string>
+    <string name="free_memory">Free memory</string>
+    <string name="used_memory">Used memory</string>
+    <string name="cpu_usage_total">Total CPU usage</string>
+    <string name="cpu_usage_by_system">CPU used by system</string>
+    <string name="cpu_usage_by_user">CPU used by user</string>
+    <string name="device_id">Device ID</string>
+    <string name="sdk_version">SDK version</string>
+    <string name="display_diagonal">Display diagonal (inches)</string>
+    <string name="cpu_idle">CPU idle</string>
+    <string name="network_type">Network type</string>
+    <string name="device_type">Device type</string>
+</resources>

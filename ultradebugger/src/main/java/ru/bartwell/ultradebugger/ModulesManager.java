@@ -29,8 +29,8 @@ class ModulesManager {
                 String moduleClassName = String.format(Locale.getDefault(), MODULE_CLASS_NAME_FORMAT,
                         BuildConfig.APPLICATION_ID, BuildConfig.KNOWN_MODULES[i]);
                 Class<?> clazz = Class.forName(moduleClassName);
-                Constructor<?> ctor = clazz.getConstructor(Context.class);
-                mModules.put(BuildConfig.KNOWN_MODULES[i], (BaseModule) ctor.newInstance(context));
+                Constructor<?> constructor = clazz.getConstructor(Context.class, String.class);
+                mModules.put(BuildConfig.KNOWN_MODULES[i], (BaseModule) constructor.newInstance(context, BuildConfig.KNOWN_MODULES[i]));
             } catch (Exception e) {
                 e.printStackTrace();
             }

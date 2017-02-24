@@ -13,6 +13,10 @@ public class Link extends ContentPart {
         mLabel = label;
     }
 
+    public Link(String url, ContentPart contentPart) {
+        this(url, contentPart.toHtml());
+    }
+
     @Override
     public String toHtml() {
         return "<a href=\"" + mUrl + "\">" + mLabel + "</a>";

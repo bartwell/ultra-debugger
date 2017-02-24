@@ -16,7 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import ru.bartwell.ultradebugger.base.BaseModule;
-import ru.bartwell.ultradebugger.base.Utils;
+import ru.bartwell.ultradebugger.base.utils.HttpUtils;
+import ru.bartwell.ultradebugger.base.utils.CommonUtils;
 import ru.bartwell.ultradebugger.base.html.ErrorPage;
 import ru.bartwell.ultradebugger.base.html.Form;
 import ru.bartwell.ultradebugger.base.html.LinksList;
@@ -42,8 +43,8 @@ public class Module extends BaseModule {
 
     private Map<String, Class<?>> mTypes = new HashMap<>();
 
-    public Module(Context context) {
-        super(context);
+    public Module(@NonNull Context context, @NonNull String moduleId) {
+        super(context, moduleId);
         mTypes.put("String", String.class);
         mTypes.put("Boolean", Boolean.class);
         mTypes.put("Integer", Integer.class);
@@ -52,32 +53,33 @@ public class Module extends BaseModule {
         mTypes.put("Set", Set.class);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getName() {
         return getString(R.string.sharedpreferences_name);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getDescription() {
         return getString(R.string.sharedpreferences_description);
     }
 
+    @NonNull
     @Override
     public HttpResponse handle(@NonNull HttpRequest request) {
         Page page;
-        String file = getParameterValue(request.getParameters(), PARAMETER_FILE);
+        String file = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_FILE);
         if (file == null) {
             page = showFilesList();
         } else {
-            String edit = getParameterValue(request.getParameters(), PARAMETER_EDIT);
+            String edit = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_EDIT);
             if (edit == null) {
-                String delete = getParameterValue(request.getParameters(), PARAMETER_DELETE);
+                String delete = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_DELETE);
                 if (delete != null) {
                     deleteItem(file, delete);
                 }
-                String save = getParameterValue(request.getParameters(), PARAMETER_SAVE);
+                String save = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_SAVE);
                 if (save != null) {
                     saveItem(file, save, request);
                 }
@@ -165,7 +167,7 @@ public class Module extends BaseModule {
                 if (list.length > 0) {
                     LinksList linksList = new LinksList();
                     for (String file : list) {
-                        file = Utils.trimFileExtension(file);
+                        file = CommonUtils.trimFileExtension(file);
                         linksList.add("?" + PARAMETER_FILE + "=" + file, file);
                     }
                     Page page = new Page();
@@ -195,8 +197,8 @@ public class Module extends BaseModule {
         try {
             SharedPreferences sharedPreferences = getContext().getSharedPreferences(file, MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            String type = getParameterValue(request.getParameters(), PARAMETER_TYPE);
-            String value = getParameterValue(request.getParameters(), PARAMETER_VALUE);
+            String type = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_TYPE);
+            String value = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_VALUE);
             if (value != null) {
                 if ("String".equals(type)) {
                     editor.putString(key, value);

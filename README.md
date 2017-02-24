@@ -3,12 +3,26 @@ Ultra Debugger
 
 Ultra Debugger is an open source modules-based android library for application debugging.
 
+## Features
+
+Ultra Debugger is module-based tools for easy Android applications debugging. It can be useful for developers and testers. Module-based architecture allow to extend functionality and add specific functionality for your project.
+
+Currently available modules:
+
+* Reflection - allow call methods from current activity, see list of fields and methods in this activity
+* SQLite - allow see, add, edit and delete items from databases
+* Shared Preferences - allow see, add, edit and delete items from shared preferences
+* Info - shows information about device
+* Files - allow see directories and download/remove files from device (including application directory )
+
+_New modules will added..._
+
 ## Integration
 
 __1.__ Add Ultra Debugger library as a dependency to your project:
 
 ```groovy
-debugCompile('ru.bartwell:ultradebugger:1.0') {
+debugCompile('ru.bartwell:ultradebugger:1.1') {
     exclude group: 'ru.bartwell:ultradebugger.module'
 }
 ```
@@ -17,9 +31,11 @@ _You can use `compile` instead of `debugCompile` if you need._
 
 __2.__ Add libraries of modules that you need:
 ```groovy
-debugCompile 'ru.bartwell:ultradebugger.module.reflection:1.0'
-debugCompile 'ru.bartwell:ultradebugger.module.sqlite:1.0'
-debugCompile 'ru.bartwell:ultradebugger.module.sharedpreferences:1.0'
+debugCompile 'ru.bartwell:ultradebugger.module.reflection:1.1'
+debugCompile 'ru.bartwell:ultradebugger.module.sqlite:1.1'
+debugCompile 'ru.bartwell:ultradebugger.module.sharedpreferences:1.1'
+debugCompile 'ru.bartwell:ultradebugger.module.info:1.1'
+debugCompile 'ru.bartwell:ultradebugger.module.files:1.1'
 ```
 
 __3.__ Initialize library. Add code below in your Application class:
@@ -36,18 +52,6 @@ UltraDebugger.start(this, 8081);
 
 _Default port number is 8080._
 
-## Features
-
-Ultra Debugger is module-based tools for easy Android applications debugging. It can be useful for developers and testers. Module-based architecture allow to extend functionality and add specific functionality for your project.
-
-Currently available modules:
-
-* Reflection - allow call methods from current activity, see list of fields and methods in this activity
-* SQLite - allow see, add, edit and delete items from databases
-* Shared Preferences - allow see, add, edit and delete items from shared preferences
-
-_New modules will added..._
-
 ## Usage
 
 After you integrate main library and modules libraries just start application on your smartphone, open browser on your computer and type in address http://xxx.xxx.xxx.xxx:8080, where xxx.xxx.xxx.xxx - IP address of your smartphone. It mean that your computer and smartphone should connected to same network.
@@ -55,7 +59,7 @@ After you integrate main library and modules libraries just start application on
 ## How to support project
 
 Your help is really appreciated.
-* Please create your own modules and make pull requests
+* Please create your own modules or edit exists and make pull requests
 * Or just click star button on this page.
 
 ## Modules creation
@@ -64,7 +68,7 @@ __1.__ Create Android library project.
 
 __2.__ Add base library as dependency:
 ```groovy
-compile 'ru.bartwell:ultradebugger.base:1.0'
+compile 'ru.bartwell:ultradebugger.base:1.1'
 ```
 
 __3.__ Create class `Module extends BaseModule` in package `ru.bartwell.ultradebugger.module.xxx`, where `xxx` - your module name.

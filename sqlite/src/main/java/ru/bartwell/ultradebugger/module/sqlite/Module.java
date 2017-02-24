@@ -11,7 +11,8 @@ import android.text.TextUtils;
 import java.util.Map;
 
 import ru.bartwell.ultradebugger.base.BaseModule;
-import ru.bartwell.ultradebugger.base.Utils;
+import ru.bartwell.ultradebugger.base.utils.HttpUtils;
+import ru.bartwell.ultradebugger.base.utils.CommonUtils;
 import ru.bartwell.ultradebugger.base.html.ErrorPage;
 import ru.bartwell.ultradebugger.base.html.Form;
 import ru.bartwell.ultradebugger.base.html.Link;
@@ -35,17 +36,17 @@ public class Module extends BaseModule {
     private static final String PARAMETER_FIELD = "field";
     private static final String COLUMN_ROW_ID = "rowid";
 
-    public Module(Context context) {
-        super(context);
+    public Module(@NonNull Context context, @NonNull String moduleId) {
+        super(context, moduleId);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getName() {
         return getString(R.string.sqlite_name);
     }
 
-    @Nullable
+    @NonNull
     @Override
     public String getDescription() {
         return getString(R.string.sqlite_description);
@@ -55,21 +56,21 @@ public class Module extends BaseModule {
     @Override
     public HttpResponse handle(@NonNull HttpRequest request) {
         Page page;
-        String database = getParameterValue(request.getParameters(), PARAMETER_DATABASE);
-        String table = getParameterValue(request.getParameters(), PARAMETER_TABLE);
+        String database = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_DATABASE);
+        String table = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_TABLE);
         if (database == null) {
             page = showDatabasesList();
         } else {
             if (table == null) {
                 page = showTablesList(database);
             } else {
-                String edit = getParameterValue(request.getParameters(), PARAMETER_EDIT);
+                String edit = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_EDIT);
                 if (edit == null) {
-                    String delete = getParameterValue(request.getParameters(), PARAMETER_DELETE);
-                    if (!TextUtils.isEmpty(delete) && Utils.isNumber(delete)) {
+                    String delete = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_DELETE);
+                    if (!TextUtils.isEmpty(delete) && CommonUtils.isNumber(delete)) {
                         deleteItem(database, table, delete);
                     }
-                    String save = getParameterValue(request.getParameters(), PARAMETER_SAVE);
+                    String save = HttpUtils.getParameterValue(request.getParameters(), PARAMETER_SAVE);
                     if (save != null) {
                         saveItem(database, table, save, request);
                     }
@@ -86,7 +87,7 @@ public class Module extends BaseModule {
     @NonNull
     private Page showForm(@NonNull String database, @NonNull String tableName, @Nullable String id) {
         try {
-            boolean isEdit = Utils.isNumber(id);
+            boolean isEdit = CommonUtils.isNumber(id);
             SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase(database, Context.MODE_PRIVATE, null);
             Cursor cursor;
             if (isEdit) {
@@ -209,7 +210,7 @@ public class Module extends BaseModule {
 
     private void saveItem(@NonNull String database, @NonNull String table, @NonNull String id, HttpRequest request) {
         try {
-            Map<String, String> mapFromParameters = getMapFromParameters(request.getParameters(), PARAMETER_FIELD);
+            Map<String, String> mapFromParameters = HttpUtils.getMapFromParameters(request.getParameters(), PARAMETER_FIELD);
             SQLiteDatabase sqLiteDatabase = getContext().openOrCreateDatabase(database, Context.MODE_PRIVATE, null);
             ContentValues contentValues = new ContentValues();
             for (Map.Entry<String, String> entry : mapFromParameters.entrySet()) {
@@ -218,7 +219,7 @@ public class Module extends BaseModule {
                 }
             }
             if (contentValues.size() > 0) {
-                if (Utils.isNumber(id)) {
+                if (CommonUtils.isNumber(id)) {
                     sqLiteDatabase.update(table, contentValues, COLUMN_ROW_ID + "=?", new String[]{id});
                 } else {
                     sqLiteDatabase.insert(table, null, contentValues);
