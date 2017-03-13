@@ -20,29 +20,17 @@ _New modules will added..._
 
 ## Integration
 
-__1.__ Add Ultra Debugger library as a dependency to your project:
+Here is few option to integrate Ultra Debugger in your application.
 
+##### Add for all configurations
+
+__1.__ Add in build.gradle:
 ```groovy
-debugCompile('ru.bartwell:ultradebugger:1.1') {
-    exclude group: 'ru.bartwell:ultradebugger.module'
-}
+compile 'ru.bartwell:ultradebugger:1.2'
 ```
 
-_You can use `compile` instead of `debugCompile` if you need._
-
-__2.__ Add libraries of modules that you need:
+__2.__ Add in Application class in onCreate() method:
 ```groovy
-debugCompile 'ru.bartwell:ultradebugger.module.reflection:1.1'
-debugCompile 'ru.bartwell:ultradebugger.module.sqlite:1.1'
-debugCompile 'ru.bartwell:ultradebugger.module.sharedpreferences:1.1'
-debugCompile 'ru.bartwell:ultradebugger.module.info:1.1'
-debugCompile 'ru.bartwell:ultradebugger.module.files:1.1'
-debugCompile 'ru.bartwell:ultradebugger.module.logger:1.1'
-```
-
-__3.__ Initialize library. Add code below in your Application class:
-
-```java
 UltraDebugger.start(this);
 ```
 
@@ -52,11 +40,44 @@ If you need specify custom port, add it as second argument:
 UltraDebugger.start(this, 8081);
 ```
 
+##### Add only for debug configurations
+
+__1.__ Add in build.gradle:
+```groovy
+debugCompile 'ru.bartwell:ultradebugger:1.2'
+```
+
+__2.__ Add in Application class in onCreate() method:
+
+```java
+if (BuildConfig.DEBUG) {
+    try {
+        Class<?> clazz = Class.forName("ru.bartwell.ultradebugger.UltraDebugger");
+        Method method = clazz.getMethod("start", Context.class);
+        method.invoke(null, this);
+    } catch (Exception ignored) {
+    }
+}
+```
+
+If you need specify custom port, add it as second argument:
+
+```java
+if (BuildConfig.DEBUG) {
+    try {
+        Class<?> clazz = Class.forName("ru.bartwell.ultradebugger.UltraDebugger");
+        Method method = clazz.getMethod("start", Context.class, int.class);
+        method.invoke(null, this, 8081);
+    } catch (Exception ignored) {
+    }
+}
+```
+
 _Default port number is 8080._
 
 ## Usage
 
-After you integrate main library and modules libraries just start application on your smartphone, open browser on your computer and type in address http://xxx.xxx.xxx.xxx:8080, where xxx.xxx.xxx.xxx - IP address of your smartphone. It mean that your computer and smartphone should connected to same network.
+After you integrate library just start application on your smartphone, open browser on your computer and type in address http://xxx.xxx.xxx.xxx:8080, where xxx.xxx.xxx.xxx - IP address of your smartphone. It mean that your computer and smartphone should connected to same network.
 
 ## How to support project
 
@@ -70,7 +91,7 @@ __1.__ Create Android library project.
 
 __2.__ Add base library as dependency:
 ```groovy
-compile 'ru.bartwell:ultradebugger.base:1.1'
+compile 'ru.bartwell:ultradebugger.base:1.2'
 ```
 
 __3.__ Create class `Module extends BaseModule` in package `ru.bartwell.ultradebugger.module.xxx`, where `xxx` - your module name.

@@ -11,3 +11,7 @@ dependencies {
 }
 
 apply from: '../maven_push.gradle'
+
+android {
+    buildToolsVersion '25.0.0'
+}
