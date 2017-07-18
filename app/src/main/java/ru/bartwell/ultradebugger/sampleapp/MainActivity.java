@@ -11,8 +11,7 @@ import android.widget.Toast;
 
 import java.util.Random;
 
-import ru.bartwell.ultradebugger.UltraDebugger;
-import ru.bartwell.ultradebugger.module.logger.Logger;
+import ru.bartwell.ultradebugger.wrapper.UltraDebuggerWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,12 +23,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Fill information about IP and port
-        String ip = UltraDebugger.getIp();
+        String ip = UltraDebuggerWrapper.getIp();
         String address;
         if (TextUtils.isEmpty(ip)) {
-            address = getString(R.string.unknown_ip_format, UltraDebugger.getPort());
+            address = getString(R.string.unknown_ip);
         } else {
-            address = getString(R.string.ip_format, ip, UltraDebugger.getPort());
+            address = getString(R.string.ip_format, ip, UltraDebuggerWrapper.getPort());
         }
         ((TextView) findViewById(R.id.url)).setText(address);
 
@@ -53,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Logger.saveValue(this, "RandomValue", new Random().nextInt(100));
-        Logger.addLog(this, "onResume");
+        UltraDebuggerWrapper.saveValue(this, "RandomValue", new Random().nextInt(100));
+        UltraDebuggerWrapper.addLog(this, "onResume");
     }
 
     @Override
     protected void onPause() {
-        Logger.addLog(this, "onPause");
+        UltraDebuggerWrapper.addLog(this, "onPause");
         super.onPause();
     }
 }

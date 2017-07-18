@@ -22,14 +22,4 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="15dp"
         tools:text="http://xxx.xxx.xxx.xxx:8080"/>
-
-    <TextView
-        style="@style/TextAppearance.AppCompat.Small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="15dp"
-        android:text="@string/ip_note"/>
 </LinearLayout>

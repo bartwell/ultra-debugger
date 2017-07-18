@@ -26,51 +26,27 @@ Here is few option to integrate Ultra Debugger in your application.
 
 __1.__ Add in build.gradle:
 ```groovy
-compile 'ru.bartwell:ultradebugger:1.2'
+compile 'ru.bartwell:ultradebugger:1.3'
 ```
 
 __2.__ Add in Application class in onCreate() method:
 ```groovy
-UltraDebugger.start(this);
-```
-
-If you need specify custom port, add it as second argument:
-
-```java
-UltraDebugger.start(this, 8081);
+UltraDebugger.start(this, 8090);
 ```
 
 ##### Add only for debug configurations
 
 __1.__ Add in build.gradle:
 ```groovy
-debugCompile 'ru.bartwell:ultradebugger:1.2'
+debugCompile 'ru.bartwell:ultradebugger:1.3'
+compile 'ru.bartwell:ultradebugger.wrapper:1.3'
 ```
 
 __2.__ Add in Application class in onCreate() method:
 
 ```java
-if (BuildConfig.DEBUG) {
-    try {
-        Class<?> clazz = Class.forName("ru.bartwell.ultradebugger.UltraDebugger");
-        Method method = clazz.getMethod("start", Context.class);
-        method.invoke(null, this);
-    } catch (Exception ignored) {
-    }
-}
-```
-
-If you need specify custom port, add it as second argument:
-
-```java
-if (BuildConfig.DEBUG) {
-    try {
-        Class<?> clazz = Class.forName("ru.bartwell.ultradebugger.UltraDebugger");
-        Method method = clazz.getMethod("start", Context.class, int.class);
-        method.invoke(null, this, 8081);
-    } catch (Exception ignored) {
-    }
-}
+UltraDebuggerWrapper.setEnabled(BuildConfig.DEBUG);
+UltraDebuggerWrapper.start(this, 8090);
 ```
 
 _Default port number is 8080._

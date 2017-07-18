@@ -18,6 +18,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'org.nanohttpd:nanohttpd:2.3.1'
+    compile project(':wrapper')
     compile project(':base')
     compile project(':sqlite')
     compile project(':sharedpreferences')

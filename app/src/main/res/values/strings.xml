@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Ultra Debugger Sample App</string>
     <string name="type_address_description">Please connect your smartphone and computer to same network, open browser on computer and type address:</string>
-    <string name="ip_note">Change xxx.xxx.xxx.xxx to IP of your smartphone</string>
-    <string name="unknown_ip_format">http://xxx.xxx.xxx.xxx:%d</string>
+    <string name="unknown_ip">Unknown IP address</string>
     <string name="ip_format">http://%1$s:%2$d</string>
 </resources>

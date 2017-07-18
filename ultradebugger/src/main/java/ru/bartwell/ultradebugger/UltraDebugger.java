@@ -1,6 +1,7 @@
 package ru.bartwell.ultradebugger;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -17,11 +18,11 @@ public class UltraDebugger {
     private static String sIp;
     private static int sPort;
 
-    public static void start(Context context) {
+    public static void start(@NonNull Context context) {
         start(context, HttpServer.DEFAULT_PORT);
     }
 
-    public static void start(Context context, int port) {
+    public static void start(@NonNull Context context, int port) {
         sIp = IpUtils.getIpV4();
         sPort = port;
         addLogInfo(port);
@@ -29,7 +30,7 @@ public class UltraDebugger {
         ServerService.start(context, port);
     }
 
-    public static void stop(Context context) {
+    public static void stop(@NonNull Context context) {
         ServerService.stop(context);
     }
 
