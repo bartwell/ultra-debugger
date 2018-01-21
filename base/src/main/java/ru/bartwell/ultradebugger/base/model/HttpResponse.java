@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by BArtWell on 05.01.2017.
@@ -22,6 +24,8 @@ public class HttpResponse {
     @Nullable
     private InputStream mStream;
     private long mContentLength;
+    @NonNull
+    Map<String, String> mHeaders = new HashMap<>();
 
     public HttpResponse(@NonNull String content) {
         mStatus = Status.OK;
@@ -68,6 +72,15 @@ public class HttpResponse {
 
     public long getContentLength() {
         return mContentLength;
+    }
+
+    public void addHeader(@NonNull String name, @NonNull String value) {
+        mHeaders.put(name, value);
+    }
+
+    @NonNull
+    public Map<String, String> getHeaders() {
+        return mHeaders;
     }
 
     public enum Status {

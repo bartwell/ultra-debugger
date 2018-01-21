@@ -27,6 +27,14 @@ public class Logger {
         }
     }
 
+    public static String getLogDownloadPath() {
+        return Utils.getDownloadPath();
+    }
+
+    public static void clearLogs(@NonNull Context context) {
+        StorageHelper.clearLogs(context);
+    }
+
     public static void saveValue(@NonNull Context context, @NonNull String key, @Nullable Object value) {
         StorageHelper.saveValue(context, key, value);
     }

@@ -94,6 +94,30 @@ public class UltraDebuggerWrapper {
         }
     }
 
+    @NonNull
+    public static String getLogDownloadPath() {
+        if (sIsEnabled) {
+            try {
+                Class<?> clazz = Class.forName("ru.bartwell.ultradebugger.module.logger.Logger");
+                Method method = clazz.getMethod("getLogDownloadPath");
+                return (String) method.invoke(null);
+            } catch (Exception ignored) {
+            }
+        }
+        return "";
+    }
+
+    public static void clearLogs(@NonNull Context context) {
+        if (sIsEnabled) {
+            try {
+                Class<?> clazz = Class.forName("ru.bartwell.ultradebugger.module.logger.Logger");
+                Method method = clazz.getMethod("clearLogs", Context.class);
+                method.invoke(null, context);
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     public static void saveValue(@NonNull Context context, @NonNull String key, @Nullable Object value) {
         if (sIsEnabled) {
             try {

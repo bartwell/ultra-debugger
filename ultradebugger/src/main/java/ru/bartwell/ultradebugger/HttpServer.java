@@ -71,11 +71,16 @@ class HttpServer extends NanoHTTPD {
                 if (response.getStream() == null) {
                     return newFixedLengthResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getContent());
                 } else {
+                    Response result;
                     if (response.getContentLength() >= 0) {
-                        return newFixedLengthResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getStream(), response.getContentLength());
+                        result = newFixedLengthResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getStream(), response.getContentLength());
                     } else {
-                        return newChunkedResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getStream());
+                        result = newChunkedResponse(convertResponseStatus(response.getStatus()), response.getContentType(), response.getStream());
                     }
+                    for (Map.Entry<String, String> entry : response.getHeaders().entrySet()) {
+                        result.addHeader(entry.getKey(), entry.getValue());
+                    }
+                    return result;
                 }
             }
         }

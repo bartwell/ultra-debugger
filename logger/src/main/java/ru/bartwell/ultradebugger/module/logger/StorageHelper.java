@@ -52,6 +52,7 @@ class StorageHelper {
     }
 
     static void addLog(@NonNull Context context, @NonNull String text) {
+        rotateLogs(context);
         writeToLogsFile(context, getLogDate() + " " + text + "\n", true);
     }
 
